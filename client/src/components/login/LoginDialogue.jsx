@@ -7,8 +7,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState , useContext } from "react";
 import { authenticateSignup } from "../../service/api";
+import { DataContext } from "../../context/DataProvider";
 
 const Component = styled(Box)`
    height: 70vh;
@@ -71,7 +72,7 @@ cursor: pointer;
 
 const LoginDialogue = ({ open, setOpen }) => {
 
-  const AccountInitialValues = {
+  const accountInitialValues = {
     login : {
       view : 'login',
       heading: 'Login',
@@ -85,24 +86,26 @@ const LoginDialogue = ({ open, setOpen }) => {
   }
 
   const SignInInitialvalues = {
-    firstName: '',
-    lastName: '',
-    userName: '',
+    firstname: '',
+    lastname: '',
+    username: '',
     email: '',
     password: '',
     phone: ''
   }
 
-  const [account, toggleAccount] = useState(AccountInitialValues.login);
+  const [account, toggleAccount] = useState(accountInitialValues.login);
   const [signup , setSignup] = useState(SignInInitialvalues)
+
+  const { setAccount } = useContext(DataContext)
  
   const handleClose = () => {
     setOpen(false);
-    toggleAccount(AccountInitialValues.login)
+    toggleAccount(accountInitialValues.login)
   };
 
   const toggleSignup = ()=> {
-    toggleAccount(AccountInitialValues.Signin)
+    toggleAccount(accountInitialValues.Signin)
   }
 
   const onInputChange = (e)=> {
@@ -112,6 +115,10 @@ const LoginDialogue = ({ open, setOpen }) => {
 
   const signupUser = async ()=> {
    let response = await authenticateSignup(signup);
+   console.log(response);
+   if(!response) return;
+   handleClose();
+   setAccount(signup.firstname)
   }
 
 
@@ -138,9 +145,9 @@ const LoginDialogue = ({ open, setOpen }) => {
           </Wrapper>
           :
           <Wrapper>
-          <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='firstName' label="Enter Firstname" />
-          <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='lastName' label="Enter Lastname" />
-          <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='userName' label="Enter Username" />
+          <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='firstname' label="Enter Firstname" />
+          <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='lastname' label="Enter Lastname" />
+          <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='username' label="Enter Username" />
           <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='email' label="Enter Email" />
           <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='password' label="Enter Password" />
           <TextField variant="standard" onChange={(e)=> onInputChange(e)} name='phone' label="Enter Phone Number" />
