@@ -4,6 +4,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LoginDialogue from '../login/LoginDialogue';
 import { useState , useContext } from 'react';
 import { DataContext } from '../../context/DataProvider';
+import Profile from './Profile';
 
 const Wrapper = styled(Box)`
    display: flex;
@@ -34,7 +35,7 @@ const Custombuttons = () => {
 
 const [open, setOpen] = useState(false); 
 
-const { account } = useContext( DataContext)
+const { account , setAccount } = useContext( DataContext)
 
 const handleOpen = () => {
   setOpen(true);
@@ -44,7 +45,7 @@ const handleOpen = () => {
     <Wrapper style={{display: "flex", justifyContent:"space-between" }}>
 
       {
-        account ? <Typography>{account}</Typography> : 
+        account ? <Profile  account={account} setAccount={setAccount} /> : 
         <LoginButton variant='contained' onClick={() => handleOpen()}>Login</LoginButton>
       }
 
